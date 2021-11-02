@@ -1,0 +1,12 @@
+@import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@200;400&family=Manrope:wght@500;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.badge{
+  @apply bg-gray-600 text-green-200 p-2 rounded-full absolute mt-40 ml-40
+}
+.card{
+  @apply bg-purple-500 w-96 h-96 rounded-xl shadow-lg
+}
