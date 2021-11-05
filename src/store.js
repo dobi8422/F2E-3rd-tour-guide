@@ -2,16 +2,22 @@ import { createStore } from 'vuex'
 import JSSHA from 'jsSHA'
 import axios from 'axios'
 import router from './router.js'
+import viewList from './viewList.json'
+import foodList from './foodList.json'
+import roomList from './roomList.json'
+import activeList from './activeList.json'
 
 const store = createStore({
   state: () => ({
-    nowPage: '',
     viewList: [],
     foodList: [],
     roomList: [],
     activeList: [],
+    //
+    nowPage: '',
     searchState: false,
-    searchList: []
+    searchList: [],
+    nowType: 'list'
   }),
   actions: {
     getAuthorizationHeader () {
@@ -29,6 +35,15 @@ const store = createStore({
     },
     GetData ({ commit, dispatch }, payload) {
       console.log(`get data: ${payload}`)
+      // 因API每日限50次，暫時用資料檔代替
+      let data
+      switch (payload) {
+        case 'view': data = viewList; break
+        case 'food': data = foodList; break
+        case 'room': data = roomList; break
+        case 'active': data = activeList; break
+      }
+      commit(`${payload.toUpperCase()}LIST`, data)
       // const data = []
       // let str
       // switch (payload) {
@@ -38,7 +53,7 @@ const store = createStore({
       //   case 'active': str = 'Activity'; break
       // }
       // axios.get(
-      //   `https://ptx.transportdata.tw/MOTC/v2/Tourism/${str}?$top=6&$format=JSON`,
+      //   `https://ptx.transportdata.tw/MOTC/v2/Tourism/${str}?$top=50&$format=JSON`,
       //   { headers: dispatch('getAuthorizationHeader') })
       //   .then(res => {
       //     res.data.forEach(item => {
@@ -63,27 +78,36 @@ const store = createStore({
       //     }).catch(error => console.log(error))
       // }
     },
-    LookDetail ({ commit }, payload) {
-      router.push(`/view/${payload}`)
+    changePage ({ commit, dispatch, state }, payload) {
+      payload = payload.replace(/\//, '')
+      if (!state[`${payload}List`[0]]) {
+        dispatch('GetData', payload)
+      }
+      commit('CHANGEPAGE', payload)
+      router.push(`/${payload}`)
     }
   },
   mutations: {
-    CHANGELIST (state, payload) { state.nowPage = payload },
     VIEWLIST (state, payload) { state.viewList = payload },
     FOODLIST (state, payload) { state.foodList = payload },
     ROOMLIST (state, payload) { state.roomList = payload },
     ACTIVELIST (state, payload) { state.activeList = payload },
+    //
+    CHANGEPAGE (state, payload) { state.nowPage = payload },
     SEARCHSTATE (state, payload) { state.searchState = payload },
-    SEARCHLIST (state, payload) { state.searchList = payload }
+    SEARCHLIST (state, payload) { state.searchList = payload },
+    CHANGETYPE (state, payload) { state.nowType = payload }
   },
   getters: {
-    nowPage: state => state.nowPage,
     viewList: state => state.viewList,
     foodList: state => state.foodList,
     roomList: state => state.roomList,
     activeList: state => state.activeList,
+    //
+    nowPage: state => state.nowPage,
     searchState: state => state.searchState,
-    searchList: state => state.searchList
+    searchList: state => state.searchList,
+    nowType: state => state.nowType
   }
 })
 
