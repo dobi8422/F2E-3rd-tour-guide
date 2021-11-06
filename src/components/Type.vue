@@ -1,7 +1,7 @@
 <template>
-  <div class="list-none cursor-pointer absolute top-24 right-6 border-2 border-white rounded-full px-2 py-1">
-    <li v-if="nowType === 'list'" @click="changeType('block')" class="text-white"><i class="fas fa-th"></i></li>
-    <li v-if="nowType === 'block'" @click="changeType('list')" class="text-white"><i class="fas fa-th-list"></i></li>
+  <div class="sider_button right-6">
+    <button v-if="nowType === 'list'" @click="changeType('block')" class="text-white"><i class="fas fa-th"></i></button>
+    <button v-if="nowType === 'block'" @click="changeType('list')" class="text-white"><i class="fas fa-th-list"></i></button>
   </div>
 </template>
 

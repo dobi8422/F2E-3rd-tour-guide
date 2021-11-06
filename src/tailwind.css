@@ -4,9 +4,9 @@
 @tailwind components;
 @tailwind utilities;
 
-.badge{
-  @apply bg-gray-600 text-green-200 p-2 rounded-full absolute mt-40 ml-40
+.sider_button{
+  @apply absolute top-72 md:top-36 xl:top-24 border-2 border-white rounded-full px-2 py-1
 }
-.card{
-  @apply bg-purple-500 w-96 h-96 rounded-xl shadow-lg
+.filter_button{
+  @apply border-2 border-white rounded-full px-2 mx-2 my-2
 }

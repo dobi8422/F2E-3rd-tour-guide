@@ -1,8 +1,8 @@
 <template>
   <div>
     <Nav :theme=theme />
-    <router-view :theme=theme />
-    <Gotop />
+    <router-view class="min-h-screen" :theme=theme />
+    <Gotop :theme=theme />
     <Footer :theme=theme />
   </div>
 </template>

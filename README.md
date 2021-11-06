@@ -23,33 +23,52 @@
 
 ## 自我要求
 
-### 樣式
+* 樣式
+  * tailwind - dark Mode
+  * grid
+  * 圖文/列表模式
+  * transition、animation、transform
 
-* tailwind - dark Mode
-* grid
-* 圖文/列表模式
-* transition、animation、transform
-
-### 技術
-
-* 使用vite, vue Composition API, `<script setup> defineProps...`
-* oData搜尋語法，(過濾無圖片資料、篩選縣市、關鍵字、...)
+* 技術
+  * 使用vite
+  * vue
+    * Composition API
+    * `<script setup> defineProps...`
+  * oData搜尋語法，(過濾無圖片資料、篩選縣市、關鍵字、...)
 
 ---
 ---
 
-* 第二次使用地圖座標...Geolocation? leaflet?
-* 閉包??????
-* ES7~12??????
+## 備忘錄
 
-刪掉無照片資料`https://ptx.transportdata.tw/MOTC/v2/Tourism/${str}?$filter=Picture/PictureUrl1 ne null &$top=6&$format=JSON`
+* 匯入縣市對應地區資料 -> filter功能，地區..類別...
+* 分業功能
 
-能不能用mutation監聽APP/theme
-分業功能
-查詢功能 分成縣市..類別...
-nav跑版
 ---
-主頁內容
-詳細資訊內容
+
+* 分類頁內容排版grid
+* 閱讀模式 list/block
+* 封面圖片，backdrop
+* select option樣式...
+
 ---
-製作地圖
+
+* 主頁內容
+* 投影片功能?
+* 詳細資訊內容
+* 製作地圖???，第二次使用地圖座標...Geolocation? leaflet?
+
+---
+
+* gotop功能
+* nav下滑變色???
+* 加入動畫(select, filter(button, -> data), loading, gotop)
+
+---
+
+* 使用閉包??????
+* 練習ES7~12??????
+
+* 刪掉無照片資料`https://ptx.transportdata.tw/MOTC/v2/Tourism/${str}?$filter=Picture/PictureUrl1 ne null &$top=6&$format=JSON`
+
+---

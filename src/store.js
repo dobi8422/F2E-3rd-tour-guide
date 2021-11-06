@@ -2,10 +2,12 @@ import { createStore } from 'vuex'
 import JSSHA from 'jsSHA'
 import axios from 'axios'
 import router from './router.js'
-import viewList from './viewList.json'
-import foodList from './foodList.json'
-import roomList from './roomList.json'
-import activeList from './activeList.json'
+//
+import viewList from './db/viewList.json'
+import foodList from './db/foodList.json'
+import roomList from './db/roomList.json'
+import activeList from './db/activeList.json'
+import searchList from './db/searchList.json'
 
 const store = createStore({
   state: () => ({
@@ -15,14 +17,14 @@ const store = createStore({
     activeList: [],
     //
     nowPage: '',
-    searchState: false,
+    searchPage: '',
     searchList: [],
+    // 還沒用到
+    county: '',
     nowType: 'list'
   }),
   actions: {
     getAuthorizationHeader () {
-      // const AppID = 'FFFFFFFF-FFFF-FFFF-FFFF-FFFFFFFFFFFFF'
-      // const AppKey = 'FFFFFFFF-FFFF-FFFF-FFFF-FFFFFFFFFFFFF'
       const AppID = '3f1a209e632642208b8c84607c4c959b'
       const AppKey = 'pPkBWEgkY8H3KV-KEQdQ8HWORBo'
       const GMTString = new Date().toGMTString()
@@ -34,6 +36,7 @@ const store = createStore({
       return { Authorization: Authorization, 'X-Date': GMTString }
     },
     GetData ({ commit, dispatch }, payload) {
+      // test
       console.log(`get data: ${payload}`)
       // 因API每日限50次，暫時用資料檔代替
       let data
@@ -44,6 +47,7 @@ const store = createStore({
         case 'active': data = activeList; break
       }
       commit(`${payload.toUpperCase()}LIST`, data)
+      //
       // const data = []
       // let str
       // switch (payload) {
@@ -62,29 +66,47 @@ const store = createStore({
       //     commit(`${payload.toUpperCase()}LIST`, data)
       //   }).catch(error => console.log(error))
     },
-    SearchList ({ commit, dispatch }, payload) {
-      const { type, keyword } = payload
+    switchData ({ state }, payload) {
+      let str
+      switch (state.nowPage) {
+        case 'view': str = 'ScenicSpot'; break
+        case 'food': str = 'Restaurant'; break
+        case 'room': str = 'Hotel'; break
+        case 'active': str = 'Activity'; break
+      }
+      return str
+    },
+    SearchList ({ commit, dispatch, state }, payload) {
+      // test
+      const data = searchList
+      commit('SEARCHLIST', data)
+      //
+      // const { county, keyword } = payload
       // const data = []
-      console.log(type, keyword)
-      // if (type === '桃園市') {
-      //   axios.get(
-      //     `https://ptx.transportdata.tw/MOTC/v2/Tourism/ScenicSpot?$top=6&$filter=contains(Name,'${keyword}')&$format=JSON`,
-      //     { headers: dispatch('getAuthorizationHeader') })
-      //     .then(res => {
-      //       res.data.forEach(item => {
-      //         data.push(item)
-      //       })
-      //       commit('SEARCHLIST', data)
-      //     }).catch(error => console.log(error))
+      // let str
+      // switch (state.nowPage) {
+      //   case 'view': str = 'ScenicSpot'; break
+      //   case 'food': str = 'Restaurant'; break
+      //   case 'room': str = 'Hotel'; break
+      //   case 'active': str = 'Activity'; break
       // }
+      // axios.get(
+      //   `https://ptx.transportdata.tw/MOTC/v2/Tourism/${str}${county ? `/${county}` : ''}?$top=30&$filter=contains(Name,'${keyword}')&$format=JSON`,
+      //   { headers: dispatch('getAuthorizationHeader') })
+      //   .then(res => {
+      //     res.data.forEach(item => {
+      //       data.push(item)
+      //     })
+      //     commit('SEARCHLIST', data)
+      //   }).catch(error => console.log(error))
     },
     changePage ({ commit, dispatch, state }, payload) {
-      payload = payload.replace(/\//, '')
-      if (!state[`${payload}List`[0]]) {
-        dispatch('GetData', payload)
+      const str = payload.replace(/\//, '')
+      if (!state[`${str}List`][0]) {
+        dispatch('GetData', str)
       }
-      commit('CHANGEPAGE', payload)
-      router.push(`/${payload}`)
+      commit('CHANGEPAGE', str)
+      router.push(`/${str}`)
     }
   },
   mutations: {
@@ -94,7 +116,7 @@ const store = createStore({
     ACTIVELIST (state, payload) { state.activeList = payload },
     //
     CHANGEPAGE (state, payload) { state.nowPage = payload },
-    SEARCHSTATE (state, payload) { state.searchState = payload },
+    SEARCHPAHE (state, payload) { state.searchPage = payload },
     SEARCHLIST (state, payload) { state.searchList = payload },
     CHANGETYPE (state, payload) { state.nowType = payload }
   },
@@ -105,7 +127,7 @@ const store = createStore({
     activeList: state => state.activeList,
     //
     nowPage: state => state.nowPage,
-    searchState: state => state.searchState,
+    searchPage: state => state.searchPage,
     searchList: state => state.searchList,
     nowType: state => state.nowType
   }
