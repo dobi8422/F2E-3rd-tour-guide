@@ -8,5 +8,5 @@
   @apply absolute top-72 md:top-36 xl:top-24 border-2 border-white rounded-full px-2 py-1
 }
 .filter_button{
-  @apply border-2 border-white rounded-full px-2 mx-2 my-2
+  @apply rounded-full mx-2 my-2
 }

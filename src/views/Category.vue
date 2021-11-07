@@ -1,7 +1,7 @@
 <template>
   <div class="p-20 rounded-t-3xl" :class="`bg-${props.theme}-400`">
     <div class="flex flex-col items-center xl:items-start xl:flex-row xl:justify-center">
-      <Filter :theme=props.theme />
+      <Filter :theme=props.theme @filterCondition=filterCondition />
       <ul class="grid grid-cols gap-4">
         <h4 class="text-3xl">{{ list[0] ? '' : '無資料符合'}}</h4>
         <li v-for="item in list" :key="item.ID">
@@ -48,7 +48,33 @@ const list = computed(() => {
       : []
 })
 
-const detail = (ID) => { router.push(`/detail/${ID}`) }
+const filterList = []
+const filterCondition = (filterCondition) => {
+  const originList = list.value
+  const loaction = originList.map(item => item.Address.slice(/[^0-9]/g))
+    .map(item => {
+      return {
+        county: item.slice(0, 3),
+        arem: item.slice(6, 9)
+      }
+    })
+  console.log(filterCondition, loaction)
+  console.log(loaction[0].county, filterCondition.filterCounty[0])
+  const arr = originList.filter(item => {
+    return item.county === filterCondition.filterCounty[0]
+  })
+  console.log(arr)
+  // console.log(originList[0].Address.slice(/[^0-9]/g).slice(6, 9), filterCondition.filterArea.map(item => item))
+  // const arr2 = originList.forEach(item => {
+  //   console.log(item.Address.slice(/[^0-9]/g).slice(6, 9))
+  // })
+  // console.log(arr2)
+  // loaction.push()
+}
+
+const detail = (ID) => {
+  router.push(`/detail/${ID}`)
+}
 
 onMounted(() => {
   store.dispatch('changePage', router.currentRoute.value.path)
