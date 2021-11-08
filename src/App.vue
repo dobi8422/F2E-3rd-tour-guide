@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div ref="scrollView">
     <Nav :theme=theme />
     <router-view class="min-h-screen" :theme=theme />
     <Gotop :theme=theme />
@@ -15,18 +15,25 @@ import Gotop from './components/GoTop.vue'
 import { computed } from 'vue'
 import router from './router.js'
 
+let color
 const theme = computed(() => {
-  let color
   switch (router.currentRoute.value.path) {
     case '/': color = 'purple'; break
     case '/view': color = 'green'; break
     case '/food': color = 'red'; break
     case '/room': color = 'blue'; break
     case '/active': color = 'yellow'; break
-    default: color = 'color'; break
+    default: color = `${color}`; break
   }
   return color
 })
+
+// const scrollView = ref('')
+
+// onMounted(() => {
+//   console.log(scrollView.clientHeight)
+// })
+
 </script>
 
 <style>

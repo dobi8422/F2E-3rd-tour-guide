@@ -5,7 +5,7 @@
 @tailwind utilities;
 
 .sider_button{
-  @apply absolute top-72 md:top-36 xl:top-24 border-2 border-white rounded-full px-2 py-1
+  @apply absolute top-52 md:top-20 lg:top-24 border-2 border-white rounded-full px-2 py-1
 }
 .filter_button{
   @apply rounded-full mx-2 my-2

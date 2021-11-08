@@ -1,6 +1,6 @@
 <template>
   <div class="w-100 text-white">
-    <button class="sider_button left-6" @click="filter = !filter"><i class="fas fa-filter text-white"></i></button>
+    <button class="sider_button left-2 md:left-6" :class="`bg-${props.theme}-400`" @click="isFilter"><i class="fas fa-filter text-white"></i></button>
     <div class="flex flex-col items-start xl:justify-between xl:w-80 rounded-3xl p-6 mb-5 xl:mr-10" :class="`bg-${props.theme}-600`" v-if="filter">
       <button class="w-100 rounded-full p-1 cursor-default xl:w-60 font-bold" :class="`bg-${props.theme}-800`">{{ nowCounty ? '關鍵字搜尋' : '篩選條件' }}</button>
       <button class="mx-2 mt-4" @click="county = !county">縣市 <i class="fas fa-chevron-right transform duration-200" :class="{'rotate-90':county}" /></button>
@@ -58,6 +58,11 @@ const filter = ref(true)
 const county = ref(true)
 const arem = ref(true)
 const itemClass = ref(true)
+
+const isFilter = () => {
+  filter.value = !filter.value
+  store.commit('FILTERPANEL')
+}
 
 const nowCounty = computed(() => store.getters.nowCounty)
 
@@ -127,5 +132,8 @@ const clearFilter = () => {
 <style>
 .w-100{
   width: 100%;
+}
+.h-100{
+  height: 100%;
 }
 </style>

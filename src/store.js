@@ -20,8 +20,9 @@ const store = createStore({
     searchPage: '',
     searchList: [],
     nowCounty: '',
-    // 還沒用到
-    nowType: 'list'
+    detailData: [],
+    listMode: true,
+    filterPanel: true
   }),
   actions: {
     getAuthorizationHeader () {
@@ -70,7 +71,7 @@ const store = createStore({
       // test
       const data = searchList
       commit('SEARCHLIST', data)
-      commit('changePage', 'view')
+      commit('CHANGEPAGE', 'view')
       //
       // const { county, keyword } = payload
 
@@ -116,7 +117,7 @@ const store = createStore({
       //       data.push(item)
       //     })
       //     commit('SEARCHLIST', data)
-      //     commit('changePage', 'view')
+      //     commit('changePage', 'view') // state.nowPage
       //   }).catch(error => console.log(error))
     },
     changePage ({ commit, dispatch, state }, payload) {
@@ -138,8 +139,9 @@ const store = createStore({
     SEARCHPAHE (state, payload) { state.searchPage = payload },
     SEARCHLIST (state, payload) { state.searchList = payload },
     SEARCHCOUNTY (state, payload) { state.nowCounty = payload },
-    //
-    CHANGETYPE (state, payload) { state.nowType = payload }
+    DETAILDATA (state, payload) { state.detailData = payload },
+    LISTMODE (state, payload) { state.listMode = !state.listMode },
+    FILTERPANEL (state, payload) { state.filterPanel = !state.filterPanel }
   },
   getters: {
     viewList: state => state.viewList,
@@ -151,8 +153,9 @@ const store = createStore({
     searchPage: state => state.searchPage,
     searchList: state => state.searchList,
     nowCounty: state => state.nowCounty,
-    //
-    nowType: state => state.nowType
+    detailData: state => state.detailData,
+    listMode: state => state.listMode,
+    filterPanel: state => state.filterPanel
   }
 })
 
