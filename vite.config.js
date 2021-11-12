@@ -3,5 +3,5 @@ import vue from '@vitejs/plugin-vue'
 
 export default defineConfig({
   plugins: [vue()],
-  base: '/tour-guide/'
+  base: '/F2E-3rd-tour-guide/'
 })
