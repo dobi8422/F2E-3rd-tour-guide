@@ -6,7 +6,7 @@
 
 ## 簡介
 
-* 台灣觀光網站，包含景點、美食、住宿、活動
+* 台灣觀光網站，可查詢景點、美食、住宿、活動
 
 ## 功能
 
@@ -14,7 +14,6 @@
 * 篩選功能(多選)(按鈕:景點分類，縣市分類)
 * mobile/iPad/desktop介面
 * 調整閱讀模式(圖文/列表) (for iPad/desktop)
-* 行程規劃??，地圖指引... ??????????
 
 * ![頁面展示-gif-1]()
 * ![搜尋操作-gif-2]()
@@ -24,22 +23,21 @@
 ## 自我挑戰
 
 * 調整閱讀模式(圖文/列表) (for iPad/desktop)
-* vue - Composition API
-  * `<script setup> defineProps...`
+* vue - Composition API - `<script setup>`
 * oData搜尋語法，(過濾無圖片資料、篩選縣市、關鍵字、...)
+* 無限滾動
+* 顯示地圖 - leaflet
 
 ---
+
+* 製作地圖，leaflet?!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+
+
 
 ## 待優化
 
-* 分業功能
-* gotop功能
-* 加入動畫(loading, gotop)
-* 製作地圖???，第二次使用地圖座標...Geolocation? leaflet?
-
----
-
-* filter功能，比對...，class1, calss2, call3...
-* 主業投影片功能?
-* 行程規劃??，地圖指引... ??????????
-* select option樣式...
+* detail頁面 -> 新增附近景點nearby...`https://2021.thef2e.com/news/week2`
+* localstorage -> 收藏
+* detail頁面 -> 重整 or 直接輸入ID網址，直接查詢資料
+* 改字型?

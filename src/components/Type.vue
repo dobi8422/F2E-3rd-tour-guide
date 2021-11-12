@@ -1,7 +1,21 @@
 <template>
   <div class="hidden md:inline ">
-    <button v-if="listMode" @click="store.commit('LISTMODE')" class="sider_button right-2 md:right-6 text-white" :class="`bg-${props.theme}-400`"><i class="fas fa-th"></i></button>
-    <button v-if="!listMode" @click="store.commit('LISTMODE')" class="sider_button right-2 md:right-6 text-white" :class="`bg-${props.theme}-400`"><i class="fas fa-th-list"></i></button>
+    <button
+      v-if="listMode"
+      @click="store.commit('LISTMODE')"
+      class="sider_button right-2 md:right-6 text-white"
+      :class="`bg-${props.theme}-400 hover:bg-white hover:text-${props.theme}-400`"
+    >
+      <i class="fas fa-th"></i>
+    </button>
+    <button
+      v-if="!listMode"
+      @click="store.commit('LISTMODE')"
+      class="sider_button right-2 md:right-6 text-white"
+      :class="`bg-${props.theme}-400 hover:bg-white hover:text-${props.theme}-400`"
+    >
+      <i class="fas fa-th-list"></i>
+    </button>
   </div>
 </template>
 

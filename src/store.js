@@ -7,7 +7,8 @@ import viewList from './db/viewList.json'
 import foodList from './db/foodList.json'
 import roomList from './db/roomList.json'
 import activeList from './db/activeList.json'
-import searchList from './db/searchList.json'
+// test
+// import searchList from './db/searchList.json'
 
 const store = createStore({
   state: () => ({
@@ -15,6 +16,7 @@ const store = createStore({
     foodList: [],
     roomList: [],
     activeList: [],
+    nowList: [],
     //
     nowPage: '',
     searchPage: '',
@@ -22,7 +24,7 @@ const store = createStore({
     nowCounty: '',
     detailData: [],
     listMode: true,
-    filterPanel: true
+    filterPanel: false
   }),
   actions: {
     getAuthorizationHeader () {
@@ -68,15 +70,9 @@ const store = createStore({
       //   }).catch(error => console.log(error))
     },
     SearchList ({ commit, dispatch, state }, payload) {
-      // test
-      const data = searchList
-      commit('SEARCHLIST', data)
-      commit('CHANGEPAGE', 'view')
-      //
-      // const { county, keyword } = payload
-
+      const { county, keyword } = payload
       let strCounty
-      switch (strCounty) {
+      switch (county) {
         case '臺北市': strCounty = 'Taipei'; break
         case '新北市': strCounty = 'NewTaipei'; break
         case '桃園市': strCounty = 'Taoyuan'; break
@@ -101,32 +97,43 @@ const store = createStore({
         case '連江縣': strCounty = 'LienchiangCounty'; break
         default: strCounty = ''; break
       }
-      // const data = []
-      // let str
-      // switch (state.nowPage) {
-      //   case 'view': str = 'ScenicSpot'; break
-      //   case 'food': str = 'Restaurant'; break
-      //   case 'room': str = 'Hotel'; break
-      //   case 'active': str = 'Activity'; break
-      // }
-      // axios.get(
-      //   `https://ptx.transportdata.tw/MOTC/v2/Tourism/${str}${county ? `/${strCounty}` : ''}?$top=30&$filter=contains(Name,'${keyword}')&$format=JSON`,
-      //   { headers: dispatch('getAuthorizationHeader') })
-      //   .then(res => {
-      //     res.data.forEach(item => {
-      //       data.push(item)
-      //     })
-      //     commit('SEARCHLIST', data)
-      //     commit('changePage', 'view') // state.nowPage
-      //   }).catch(error => console.log(error))
+      const data = []
+      let str
+      switch (state.nowPage) {
+        case 'view': str = 'ScenicSpot'; break
+        case 'food': str = 'Restaurant'; break
+        case 'room': str = 'Hotel'; break
+        case 'active': str = 'Activity'; break
+      }
+      console.log(`https://ptx.transportdata.tw/MOTC/v2/Tourism/${str}${county ? `/${strCounty}` : ''}?$top=50&$filter=contains(Name,'${keyword}')&$format=JSON`)
+      axios.get(
+        `https://ptx.transportdata.tw/MOTC/v2/Tourism/${str}${county ? `/${strCounty}` : ''}?$top=50&$filter=contains(Name,'${keyword}')&$format=JSON`,
+        { headers: dispatch('getAuthorizationHeader') })
+        .then(res => {
+          res.data.forEach(item => {
+            data.push(item)
+          })
+          commit('SEARCHLIST', data)
+          dispatch('changePage', state.nowPage)
+        }).catch(error => console.log(error))
     },
     changePage ({ commit, dispatch, state }, payload) {
       const str = payload.replace(/\//, '')
       if (!state[`${str}List`][0]) {
         dispatch('GetData', str)
       }
+      commit('NOWLIST', [])
       commit('CHANGEPAGE', str)
       router.push(`/${str}`)
+      dispatch('addNowList', str)
+    },
+    addNowList ({ commit, state }, payload) {
+      const num = state.nowList.length
+      const arr = []
+      state[`${payload}List`].forEach((item, index) => {
+        if (index > num && index < num + 13) arr.push(item)
+      })
+      commit('NOWLIST', [...state.nowList, ...arr])
     }
   },
   mutations: {
@@ -134,20 +141,22 @@ const store = createStore({
     FOODLIST (state, payload) { state.foodList = payload },
     ROOMLIST (state, payload) { state.roomList = payload },
     ACTIVELIST (state, payload) { state.activeList = payload },
+    NOWLIST (state, payload) { state.nowList = payload },
     //
     CHANGEPAGE (state, payload) { state.nowPage = payload },
-    SEARCHPAHE (state, payload) { state.searchPage = payload },
+    SEARCHPAGE (state, payload) { state.searchPage = payload },
     SEARCHLIST (state, payload) { state.searchList = payload },
     SEARCHCOUNTY (state, payload) { state.nowCounty = payload },
     DETAILDATA (state, payload) { state.detailData = payload },
-    LISTMODE (state, payload) { state.listMode = !state.listMode },
-    FILTERPANEL (state, payload) { state.filterPanel = !state.filterPanel }
+    LISTMODE (state) { state.listMode = !state.listMode },
+    FILTERPANEL (state) { state.filterPanel = !state.filterPanel }
   },
   getters: {
     viewList: state => state.viewList,
     foodList: state => state.foodList,
     roomList: state => state.roomList,
     activeList: state => state.activeList,
+    nowList: state => state.nowList,
     //
     nowPage: state => state.nowPage,
     searchPage: state => state.searchPage,
