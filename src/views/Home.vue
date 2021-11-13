@@ -1,12 +1,10 @@
 <template>
   <div class="image w-screen h-screen flex justify-center items-start md:items-center">
     <div class="flex flex-col md:flex-row justify-around items-center px-10 text-lg py-20 lg:py-32 md:border-4 border-white rounded-3xl xl:w-full xl:mx-96">
-      <router-link class="text-5xl text-center font-bold flex text-white flex-grow justify-center" to="/">
-        <!-- <img class="w-10" src="http://cdn.onlinewebfonts.com/svg/img_319419.png"> -->
+      <router-link class="text-5xl text-center font-bold flex text-white flex-grow justify-center xl:w-48" to="/">
         台灣<br>旅遊網
       </router-link>
-      <div class="flex flex-col lg:justify-around mt-5 md:mt-0 w-screen p-10 sm:px-20 md:w-96 md:p-0">
-        <div class="hidden lg:inline"></div>
+      <div class="flex flex-col mt-5 md:mt-0 w-screen p-10 sm:px-20 md:w-96 md:p-0">
         <div class="grid grid-cols-2 gap-10 font-bold sm:px-10">
           <button class="whitespace-nowrap hover:bg-white bg-green-700 text-white border-2 rounded-full px-2 py-1 ml-4 font-bold border-green-700 hover:text-green-700" @click="enter('view')"><i class="fas fa-mountain"/> 景點</button>
           <button class="whitespace-nowrap hover:bg-white bg-red-600 text-white border-2 rounded-full px-2 py-1 ml-4 font-bold border-red-600 hover:text-red-600" @click="enter('food')"><i class="fas fa-cocktail"/> 美食</button>
@@ -15,7 +13,7 @@
         </div>
         <div
           class="rounded-full flex justify-between px-3 py-1 mt-4 sm:mt-6 lg:mt-10 border-2 h-10 md:w-72 md:self-center"
-          :class="`border-${props.theme}-800 bg-${props.theme}-800 hover:bg-${props.theme}-600 text-white`"
+          :class="`border-${props.theme}-800 bg-${props.theme}-800 hover:bg-${props.theme}-700 hover:border-${props.theme}-700`"
         >
           <button class="text-red-500" @click="cancelSearch"><i class="far fa-times-circle"/></button>
           <input

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Nav :theme=theme v-if="theme !== 'orange'" />
+    <Nav :theme=theme v-if="theme !== 'gray'" />
     <router-view class="min-h-screen" :theme=theme />
     <Footer :theme=theme />
   </div>
@@ -16,7 +16,7 @@ import router from './router.js'
 let color
 const theme = computed(() => {
   switch (router.currentRoute.value.path) {
-    case '/': color = 'orange'; break
+    case '/': color = 'gray'; break
     case '/view': color = 'green'; break
     case '/food': color = 'red'; break
     case '/room': color = 'blue'; break
