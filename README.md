@@ -2,7 +2,7 @@
 
 >F2E-3rd參賽作品
 >
->TDX API - (Transport Data eXchange)
+>TDX API - (Transport Data eXchange) 限取50次/day
 
 ## 簡介
 
