@@ -29,8 +29,8 @@
         <p>{{ detail[0].Address ? `地址：${detail[0].Address}` : detail[0].Location ? `地址：${detail[0].Location}` : '地址：未提供地址' }}</p>
       </div>
       <div class="flex flex-col xl:flex-row border-dashed border-t-4 pt-5 mt-5 px-1" :class="`border-${props.theme}-300`">
-        <p class="border-2" :class="`border-${props.theme}-300`">{{ detail[0].Position }}</p>
-        <p>{{ detail[0].TravelInfo ? `交通方式：${detail[0].TravelInfo}` : '' }}</p>
+        <div id="map" class="h-96 w-full rounded-xl"></div>
+        <p class="w-full pt-5 xl:pl-5">{{ detail[0].TravelInfo ? `交通方式：${detail[0].TravelInfo}` : '' }}</p>
       </div>
       <p class="mt-8 text-center text-gray-500">{{ `更新時間：${detail[0].SrcUpdateTime}` }}</p>
     </div>
@@ -38,6 +38,7 @@
 </template>
 
 <script setup>
+import L from 'leaflet'
 import { onMounted, reactive } from 'vue'
 import router from '../router.js'
 import { useStore } from 'vuex'
@@ -48,7 +49,17 @@ const store = useStore()
 
 const detail = reactive([store.getters.detailData])
 
+const position = [detail[0].Position.PositionLat, detail[0].Position.PositionLon]
+
+let osmMap = {}
+
 onMounted(() => {
+  osmMap = L.map('map').setView(position, 14)
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+    maxZoom: 18
+  }).addTo(osmMap)
+  L.marker(position).addTo(osmMap)
   if (store.getters.nowPage === '') router.push('/')
 })
 </script>

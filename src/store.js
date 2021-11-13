@@ -2,13 +2,6 @@ import { createStore } from 'vuex'
 import JSSHA from 'jsSHA'
 import axios from 'axios'
 import router from './router.js'
-//
-import viewList from './db/viewList.json'
-import foodList from './db/foodList.json'
-import roomList from './db/roomList.json'
-import activeList from './db/activeList.json'
-// test
-// import searchList from './db/searchList.json'
 
 const store = createStore({
   state: () => ({
@@ -38,36 +31,25 @@ const store = createStore({
       const Authorization = `hmac username="${AppID}", algorithm="hmac-sha1", headers="x-date", signature="${HMAC}"`
       return { Authorization: Authorization, 'X-Date': GMTString }
     },
-    GetData ({ commit, dispatch }, payload) {
-      // test
-      console.log(`get data: ${payload}`)
-      // 因API每日限50次，暫時用資料檔代替
-      let data
-      switch (payload) {
-        case 'view': data = viewList; break
-        case 'food': data = foodList; break
-        case 'room': data = roomList; break
-        case 'active': data = activeList; break
+    GetData ({ commit, dispatch, state }, payload) {
+      const { page, connect } = payload
+      const data = []
+      let str
+      switch (page) {
+        case 'view': str = 'ScenicSpot'; break
+        case 'food': str = 'Restaurant'; break
+        case 'room': str = 'Hotel'; break
+        case 'active': str = 'Activity'; break
       }
-      commit(`${payload.toUpperCase()}LIST`, data)
-      //
-      // const data = []
-      // let str
-      // switch (payload) {
-      //   case 'view': str = 'ScenicSpot'; break
-      //   case 'food': str = 'Restaurant'; break
-      //   case 'room': str = 'Hotel'; break
-      //   case 'active': str = 'Activity'; break
-      // }
-      // axios.get(
-      //   `https://ptx.transportdata.tw/MOTC/v2/Tourism/${str}?$top=50&$format=JSON`,
-      //   { headers: dispatch('getAuthorizationHeader') })
-      //   .then(res => {
-      //     res.data.forEach(item => {
-      //       data.push(item)
-      //     })
-      //     commit(`${payload.toUpperCase()}LIST`, data)
-      //   }).catch(error => console.log(error))
+      axios.get(
+        `https://ptx.transportdata.tw/MOTC/v2/Tourism/${str}?$top=60&${connect ? '$skip=60&' : ''}$format=JSON`,
+        { headers: dispatch('getAuthorizationHeader') })
+        .then(res => {
+          res.data.forEach(item => {
+            data.push(item)
+          })
+          commit(`${page.toUpperCase()}LIST`, [...state[`${page}List`], ...data])
+        }).catch(error => console.log(error))
     },
     SearchList ({ commit, dispatch, state }, payload) {
       const { county, keyword } = payload
@@ -105,9 +87,8 @@ const store = createStore({
         case 'room': str = 'Hotel'; break
         case 'active': str = 'Activity'; break
       }
-      console.log(`https://ptx.transportdata.tw/MOTC/v2/Tourism/${str}${county ? `/${strCounty}` : ''}?$top=50&$filter=contains(Name,'${keyword}')&$format=JSON`)
       axios.get(
-        `https://ptx.transportdata.tw/MOTC/v2/Tourism/${str}${county ? `/${strCounty}` : ''}?$top=50&$filter=contains(Name,'${keyword}')&$format=JSON`,
+        `https://ptx.transportdata.tw/MOTC/v2/Tourism/${str}${county ? `/${strCounty}` : ''}?$filter=contains(Name,'${keyword}')&$format=JSON`,
         { headers: dispatch('getAuthorizationHeader') })
         .then(res => {
           res.data.forEach(item => {
@@ -120,19 +101,26 @@ const store = createStore({
     changePage ({ commit, dispatch, state }, payload) {
       const str = payload.replace(/\//, '')
       if (!state[`${str}List`][0]) {
-        dispatch('GetData', str)
+        dispatch('GetData', { page: str, connect: false })
       }
       commit('NOWLIST', [])
       commit('CHANGEPAGE', str)
       router.push(`/${str}`)
       dispatch('addNowList', str)
     },
-    addNowList ({ commit, state }, payload) {
+    addNowList ({ commit, dispatch, state }, payload) {
       const num = state.nowList.length
       const arr = []
-      state[`${payload}List`].forEach((item, index) => {
-        if (index > num && index < num + 13) arr.push(item)
-      })
+      if (num % 60 !== 0) {
+        state[`${payload}List`].forEach((item, index) => {
+          if (index > num && index < num + 13) arr.push(item)
+        })
+      } else {
+        dispatch('GetData', { page: state.nowPage, connect: true })
+        state[`${payload}List`].forEach((item, index) => {
+          if (index > num && index < num + 13) arr.push(item)
+        })
+      }
       commit('NOWLIST', [...state.nowList, ...arr])
     }
   },

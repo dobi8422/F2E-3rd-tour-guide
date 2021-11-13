@@ -1,4 +1,4 @@
-# tour-guide
+# f2e-3rd-tour-guide
 
 >F2E-3rd參賽作品
 >
@@ -7,7 +7,7 @@
 ## 簡介
 
 * 台灣觀光網站，可查詢景點、美食、住宿、活動
-* [Demo](http://dobi8422.github.io/F2E-3rd-tour-guide/)
+* [Demo](http://dobi8422.github.io/f2e-3rd-tour-guide/)
 
 ## 功能
 
@@ -33,11 +33,7 @@
 
 ## 待優化
 
-* 製作地圖，leaflet?!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-* 改回API呼叫，db只留class, county
-* test 查詢，過濾，路徑
-* 新增gif圖
-
+* 新增gif圖 11/14 有權限時，示範，並test: 查詢，過濾，查詢和過濾，無限滾動
 * detail頁面 -> 新增附近景點nearby...`https://2021.thef2e.com/news/week2`
 * localstorage -> 收藏
 * detail頁面 -> 重整 or 直接輸入ID網址，直接查詢資料

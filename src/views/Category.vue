@@ -1,6 +1,6 @@
 <template>
   <div class="p-4 lg:p-20 pt-0 lg:pt-0 rounded-t-3xl" :class="`bg-${props.theme}-400`">
-    <h4 class="text-4xl text-center py-10">{{ isFilter ? ` ${filterList.length} 筆資料` : list[0] ? `共 ${list.length} 筆資料` : '無資料符合'}}</h4>
+    <h4 class="text-4xl text-center py-10">{{ isFilter ? ` ${filterList.length} 筆資料` : searchPage ? `共 ${list.length} 筆資料` : ''}}</h4>
     <div class="flex flex-col xl:justify-start" :class="filterPanel ? 'xl:flex-row' : ''">
       <Filter :theme=props.theme @filterCondition=filterCondition />
       <ul
@@ -80,6 +80,7 @@ const store = useStore()
 const props = defineProps({ theme: String })
 const listMode = computed(() => store.getters.listMode)
 const filterPanel = computed(() => store.getters.filterPanel)
+const searchPage = computed(() => store.getters.searchPage)
 
 const nowList = computed(() => store.getters.nowList)
 

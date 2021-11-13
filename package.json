@@ -1,5 +1,5 @@
 {
-  "name": "tour-guide",
+  "name": "f2e-3rd-tour-guide",
   "version": "0.0.0",
   "scripts": {
     "dev": "vite",
@@ -11,6 +11,7 @@
     "@fortawesome/fontawesome-free": "^5.15.4",
     "axios": "^0.24.0",
     "jssha": "^3.2.0",
+    "leaflet": "^1.7.1",
     "vue": "^3.2.16",
     "vue-axios": "^3.3.7",
     "vue-router": "^4.0.12",
