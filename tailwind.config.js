@@ -1,12 +1,11 @@
 module.exports = {
   purge: ['./index.html', './src/**/*.{vue,js,ts,jsx,tsx}'],
-  darkMode: false,
+  darkMode: false, // or 'media' or 'class'
   theme: {
-    extend: {
-      fontFamily: {
-        Manrope: ['Manrope']
-      }
-    }
+    extend: {}
+  },
+  variants: {
+    extend: {}
   },
   plugins: []
 }
