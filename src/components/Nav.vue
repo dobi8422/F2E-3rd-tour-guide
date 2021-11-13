@@ -66,6 +66,7 @@ const enter = category => {
 }
 
 const search = () => {
+  store.commit('NOWLIST', [])
   store.commit('SEARCHPAGE', store.getters.nowPage)
   store.commit('SEARCHCOUNTY', county.value)
   store.dispatch('SearchList', {
@@ -75,6 +76,8 @@ const search = () => {
 }
 
 const cancelSearch = () => {
+  store.commit('NOWLIST', [])
+  store.dispatch('addNowList', store.nowPage)
   store.commit('SEARCHPAGE', '')
   store.commit('SEARCHCOUNTY', '')
   county.value = ''

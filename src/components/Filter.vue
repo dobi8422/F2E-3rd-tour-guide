@@ -124,7 +124,10 @@ const addFilterClass = classItem => {
 }
 
 // eslint-disable-next-line no-undef
-const emit = defineEmits({ filterCondition: Object })
+const emit = defineEmits({
+  filterCondition: Object,
+  cancelFilter: Boolean
+})
 // 傳入category.vue
 const sendFilter = () => {
   const filterCondition = {
@@ -135,11 +138,11 @@ const sendFilter = () => {
   emit('filterCondition', filterCondition)
 }
 
-// !!!!!! 當有nowCounty.value，則傳入資料頁為nowCounty.value 沒有則傳filterCounty
-
 const clearFilter = () => {
   filterCounty.splice(0, filterCounty.length)
   aremList.splice(0, aremList.length)
   filterArea.splice(0, filterArea.length)
+  const cancelFilter = false
+  emit('cancelFilter', cancelFilter)
 }
 </script>

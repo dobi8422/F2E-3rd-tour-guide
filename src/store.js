@@ -1,5 +1,5 @@
 import { createStore } from 'vuex'
-import JSSHA from 'jsSHA'
+import getAuthorizationHeader from './AuthorizationHeader'
 import axios from 'axios'
 import router from './router.js'
 
@@ -20,18 +20,7 @@ const store = createStore({
     filterPanel: false
   }),
   actions: {
-    getAuthorizationHeader () {
-      const AppID = '3f1a209e632642208b8c84607c4c959b'
-      const AppKey = 'pPkBWEgkY8H3KV-KEQdQ8HWORBo'
-      const GMTString = new Date().toGMTString()
-      const ShaObj = new JSSHA('SHA-1', 'TEXT', { encoding: 'UTF8' })
-      ShaObj.setHMACKey(AppKey, 'TEXT')
-      ShaObj.update('x-date: ' + GMTString)
-      const HMAC = ShaObj.getHMAC('B64')
-      const Authorization = `hmac username="${AppID}", algorithm="hmac-sha1", headers="x-date", signature="${HMAC}"`
-      return { Authorization: Authorization, 'X-Date': GMTString }
-    },
-    GetData ({ commit, dispatch, state }, payload) {
+    async GetData ({ commit, dispatch, state }, payload) {
       const { page, connect } = payload
       const data = []
       let str
@@ -41,9 +30,10 @@ const store = createStore({
         case 'room': str = 'Hotel'; break
         case 'active': str = 'Activity'; break
       }
-      axios.get(
+      console.log(`https://ptx.transportdata.tw/MOTC/v2/Tourism/${str}?$top=60&${connect ? '$skip=60&' : ''}$format=JSON`)
+      await axios.get(
         `https://ptx.transportdata.tw/MOTC/v2/Tourism/${str}?$top=60&${connect ? '$skip=60&' : ''}$format=JSON`,
-        { headers: dispatch('getAuthorizationHeader') })
+        { headers: getAuthorizationHeader() })
         .then(res => {
           res.data.forEach(item => {
             data.push(item)
@@ -89,7 +79,7 @@ const store = createStore({
       }
       axios.get(
         `https://ptx.transportdata.tw/MOTC/v2/Tourism/${str}${county ? `/${strCounty}` : ''}?$filter=contains(Name,'${keyword}')&$format=JSON`,
-        { headers: dispatch('getAuthorizationHeader') })
+        { headers: getAuthorizationHeader() })
         .then(res => {
           res.data.forEach(item => {
             data.push(item)
@@ -109,19 +99,31 @@ const store = createStore({
       dispatch('addNowList', str)
     },
     addNowList ({ commit, dispatch, state }, payload) {
-      const num = state.nowList.length
-      const arr = []
-      if (num % 60 !== 0) {
-        state[`${payload}List`].forEach((item, index) => {
-          if (index > num && index < num + 13) arr.push(item)
-        })
+      if (state.searchPage === state.nowPage) {
+        payload = 'search'
+        const num = state.nowList.length
+        const arr = []
+        if (num < state.searchList.length) {
+          state[`${payload}List`].forEach((item, index) => {
+            if (index > num && index < num + 13) arr.push(item)
+          })
+        }
+        commit('NOWLIST', [...state.nowList, ...arr])
       } else {
-        dispatch('GetData', { page: state.nowPage, connect: true })
-        state[`${payload}List`].forEach((item, index) => {
-          if (index > num && index < num + 13) arr.push(item)
-        })
+        const num = state.nowList.length
+        const arr = []
+        if (num === 0 || num % 60 !== 0) {
+          state[`${payload}List`].forEach((item, index) => {
+            if (index >= num && index < num + 12) arr.push(item)
+          })
+        } else {
+          dispatch('GetData', { page: state.nowPage, connect: true })
+          state[`${payload}List`].forEach((item, index) => {
+            if (index > num && index < num + 13) arr.push(item)
+          })
+        }
+        commit('NOWLIST', [...state.nowList, ...arr])
       }
-      commit('NOWLIST', [...state.nowList, ...arr])
     }
   },
   mutations: {

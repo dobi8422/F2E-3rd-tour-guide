@@ -2,7 +2,7 @@
   <div class="p-4 lg:p-20 pt-0 lg:pt-0 rounded-t-3xl" :class="`bg-${props.theme}-400`">
     <h4 class="text-4xl text-center py-10">{{ isFilter ? ` ${filterList.length} 筆資料` : searchPage ? `共 ${list.length} 筆資料` : ''}}</h4>
     <div class="flex flex-col xl:justify-start" :class="filterPanel ? 'xl:flex-row' : ''">
-      <Filter :theme=props.theme @filterCondition=filterCondition />
+      <Filter :theme=props.theme @filterCondition=filterCondition @cancelFilter=cancelFilter />
       <ul
         class="grid grid-cols-1 gap-4"
         :class="listMode
@@ -25,7 +25,7 @@
             <div class="p-5 grid grid-cols-1">
               <h5 class="truncate text-4xl font-bold pb-4">{{ item.Name }}</h5>
               <p class="truncate mr-1">{{ item.Description ? item.Description : item.DescriptionDetail ? item.DescriptionDetail : '未提供內容描述' }}</p>
-              <p class="truncate border-t-2 border-gray-400 pt-3 mt-3 text-lg"><i class="fas fa-map-marker-alt px-2"></i>{{ item.Address }}</p>
+              <p class="truncate border-t-2 border-gray-400 pt-3 mt-3 text-lg"><i class="fas fa-map-marker-alt px-2"></i>{{ item.Address ? item.Address : item.City }}</p>
               <p class="truncate text-lg w-64"><i class="fas fa-clock px-1.5"></i>{{ item.OpenTime ? item.OpenTime : '未提供營業時間'}}</p>
             </div>
           </div>
@@ -131,6 +131,10 @@ const filterCondition = filterCondition => {
 watch(nowList, (newValue, oldValue) => {
   isFilter.value = false
 })
+
+const cancelFilter = cancelFilter => {
+  isFilter.value = cancelFilter
+}
 
 const isGotop = ref('')
 

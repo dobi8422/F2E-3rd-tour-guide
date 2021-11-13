@@ -34,7 +34,7 @@
 ## 待優化
 
 * 新增gif圖 11/14 有權限時，示範，並test: 查詢，過濾，查詢和過濾，無限滾動
+* 改善 -> 要先滾動才會出現第一筆資料😂
 * detail頁面 -> 新增附近景點nearby...`https://2021.thef2e.com/news/week2`
 * localstorage -> 收藏
 * detail頁面 -> 重整 or 直接輸入ID網址，直接查詢資料
-* 改字型?
