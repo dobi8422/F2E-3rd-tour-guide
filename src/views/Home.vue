@@ -12,10 +12,9 @@
           <button class="whitespace-nowrap hover:bg-white bg-yellow-600 text-white border-2 rounded-full px-2 py-1 ml-4 font-bold border-yellow-600 hover:text-yellow-600" @click="enter('active')"><i class="fas fa-gift"/> 活動</button>
         </div>
         <div
-          class="rounded-full flex justify-between px-3 py-1 mt-4 sm:mt-6 lg:mt-10 border-2 h-10 md:w-72 md:self-center"
+          class="rounded-full flex justify-between px-3 py-1 mt-4 sm:mt-6 lg:mt-10 border-2 h-10 md:w-72 md:self-center ml-4"
           :class="`border-${props.theme}-800 bg-${props.theme}-800 hover:bg-${props.theme}-700 hover:border-${props.theme}-700`"
         >
-          <button class="text-red-500" @click="cancelSearch"><i class="far fa-times-circle"/></button>
           <input
             class="text-center outline-none bg-transparent w-28 placeholder-white"
             type="text"
@@ -66,14 +65,6 @@ const search = () => {
     keyword: keyword.value
   })
 }
-
-const cancelSearch = () => {
-  store.commit('SEARCHPAGE', '')
-  store.commit('SEARCHCOUNTY', '')
-  county.value = ''
-  keyword.value = ''
-}
-
 </script>
 
 <style>
