@@ -1,5 +1,5 @@
 import { createStore } from 'vuex'
-import getAuthorizationHeader from './AuthorizationHeader'
+import JSSHA from 'jsSHA'
 import axios from 'axios'
 import router from './router.js'
 
@@ -20,7 +20,18 @@ const store = createStore({
     filterPanel: false
   }),
   actions: {
-    async GetData ({ commit, dispatch, state }, payload) {
+    getAuthorizationHeader () {
+      const AppID = import.meta.env.VITE_APP_ID
+      const AppKey = import.meta.env.VITE_APP_KEY
+      const GMTString = new Date().toGMTString()
+      const ShaObj = new JSSHA('SHA-1', 'TEXT', { encoding: 'UTF8' })
+      ShaObj.setHMACKey(AppKey, 'TEXT')
+      ShaObj.update('x-date: ' + GMTString)
+      const HMAC = ShaObj.getHMAC('B64')
+      const Authorization = `hmac username="${AppID}", algorithm="hmac-sha1", headers="x-date", signature="${HMAC}"`
+      return { Authorization: Authorization, 'X-Date': GMTString }
+    },
+    GetData ({ commit, dispatch, state }, payload) {
       const { page, connect } = payload
       const data = []
       let str
@@ -30,16 +41,15 @@ const store = createStore({
         case 'room': str = 'Hotel'; break
         case 'active': str = 'Activity'; break
       }
-      console.log(`https://ptx.transportdata.tw/MOTC/v2/Tourism/${str}?$top=60&${connect ? '$skip=60&' : ''}$format=JSON`)
-      await axios.get(
+      axios.get(
         `https://ptx.transportdata.tw/MOTC/v2/Tourism/${str}?$top=60&${connect ? '$skip=60&' : ''}$format=JSON`,
-        { headers: getAuthorizationHeader() })
-        .then(res => {
-          res.data.forEach(item => {
-            data.push(item)
-          })
-          commit(`${page.toUpperCase()}LIST`, [...state[`${page}List`], ...data])
-        }).catch(error => console.log(error))
+        { headers: dispatch('getAuthorizationHeader') }
+      ).then(res => {
+        res.data.forEach(item => {
+          data.push(item)
+        })
+        commit(`${page.toUpperCase()}LIST`, [...state[`${page}List`], ...data])
+      }).catch(error => console.log(error))
     },
     SearchList ({ commit, dispatch, state }, payload) {
       const { county, keyword } = payload
@@ -79,14 +89,14 @@ const store = createStore({
       }
       axios.get(
         `https://ptx.transportdata.tw/MOTC/v2/Tourism/${str}${county ? `/${strCounty}` : ''}?$filter=contains(Name,'${keyword}')&$format=JSON`,
-        { headers: getAuthorizationHeader() })
-        .then(res => {
-          res.data.forEach(item => {
-            data.push(item)
-          })
-          commit('SEARCHLIST', data)
-          dispatch('changePage', state.nowPage)
-        }).catch(error => console.log(error))
+        { headers: dispatch('getAuthorizationHeader') }
+      ).then(res => {
+        res.data.forEach(item => {
+          data.push(item)
+        })
+        commit('SEARCHLIST', data)
+        dispatch('changePage', state.nowPage)
+      }).catch(error => console.log(error))
     },
     changePage ({ commit, dispatch, state }, payload) {
       const str = payload.replace(/\//, '')
