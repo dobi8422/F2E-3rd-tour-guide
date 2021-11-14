@@ -1,5 +1,8 @@
 # f2e-3rd-tour-guide
 
+Composition API + defineProps + tailwind，目前不知什麼問題，上傳github後沒有格式
+可能全部改用vuex
+
 >F2E-3rd參賽作品
 >
 >TDX API - (Transport Data eXchange) 限取50次/day
