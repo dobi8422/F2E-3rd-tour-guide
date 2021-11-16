@@ -1,7 +1,9 @@
 # f2e-3rd-tour-guide
 
-Composition API + defineProps + tailwind，目前不知什麼問題，上傳github後沒有格式
-可能全部改用vuex
+**不知什麼問題，上傳github後，和defineProps有關的樣式都沒了
+未來解決辦法，全部改用vuex
+(Composition API + defineProps + tailwind)**
+
 
 >F2E-3rd參賽作品
 >
