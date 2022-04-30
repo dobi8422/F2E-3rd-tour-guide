@@ -16,7 +16,7 @@
           :class="`border-${props.theme}-800 bg-${props.theme}-800 hover:bg-${props.theme}-700 hover:border-${props.theme}-700`"
         >
           <input
-            class="text-center outline-none bg-transparent w-28 placeholder-white"
+            class="text-center outline-none bg-transparent w-28 placeholder-white text-white"
             type="text"
             placeholder="關鍵字搜尋"
             v-model="keyword"
